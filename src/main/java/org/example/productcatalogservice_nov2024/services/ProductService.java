@@ -6,6 +6,8 @@ import org.example.productcatalogservice_nov2024.models.Category;
 import org.example.productcatalogservice_nov2024.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,8 +27,12 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(Long productId) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForEntity("http://fakestoreapi.com/products/{productId}", FakeStoreProductDto.class,productId).getBody();
-        return from(fakeStoreProductDto);
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity = restTemplate.getForEntity("http://fakestoreapi.com/products/{productId}", FakeStoreProductDto.class,productId);
+        if(fakeStoreProductDtoResponseEntity.getBody() == null ||
+                fakeStoreProductDtoResponseEntity.getStatusCode().equals(HttpStatusCode.valueOf(500))) {
+            return null;
+        }
+        return from(fakeStoreProductDtoResponseEntity.getBody());
     }
 
     //https://fakestoreapi.com/products/1/{}/{}/{}

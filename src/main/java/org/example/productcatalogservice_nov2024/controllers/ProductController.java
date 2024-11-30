@@ -6,6 +6,10 @@ import org.example.productcatalogservice_nov2024.models.Product;
 import org.example.productcatalogservice_nov2024.services.IProductService;
 import org.example.productcatalogservice_nov2024.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +26,25 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ProductDto getProductById(@PathVariable("id") Long productId) {
-      Product product = productService.getProductById(productId);
-      return from(product);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
+        try {
+            if(productId <= 0) {
+                throw new IllegalArgumentException("productId is invalid");
+            }
+            Product product = productService.getProductById(productId);
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+
+            if (product == null) {
+                headers.add("message", "product not exist");
+                return new ResponseEntity<>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            ProductDto productDto = from(product);
+
+            return new ResponseEntity<>(productDto, HttpStatus.OK);
+        }catch (IllegalArgumentException exception) {
+             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/products")

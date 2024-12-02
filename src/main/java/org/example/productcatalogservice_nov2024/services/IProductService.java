@@ -6,9 +6,11 @@ import org.example.productcatalogservice_nov2024.models.Product;
 import java.util.List;
 
 public interface IProductService {
-    List<ProductDto> getProducts();
+    List<Product> getProducts();
 
     Product getProductById(Long productId);
 
     Product createProduct(Product product);
+
+    Product replaceProduct(Long productId,Product inputProduct);
 }

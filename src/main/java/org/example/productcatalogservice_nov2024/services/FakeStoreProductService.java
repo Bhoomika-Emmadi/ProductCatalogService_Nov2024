@@ -2,7 +2,6 @@ package org.example.productcatalogservice_nov2024.services;
 
 import org.example.productcatalogservice_nov2024.clients.FakeStoreApiClient;
 import org.example.productcatalogservice_nov2024.dtos.FakeStoreProductDto;
-import org.example.productcatalogservice_nov2024.dtos.ProductDto;
 import org.example.productcatalogservice_nov2024.models.Category;
 import org.example.productcatalogservice_nov2024.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
@@ -22,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class ProductService implements IProductService {
+@Service("fks")
+public class FakeStoreProductService implements IProductService {
 
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;

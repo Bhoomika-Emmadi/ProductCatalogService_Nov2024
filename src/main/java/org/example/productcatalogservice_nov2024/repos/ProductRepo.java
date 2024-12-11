@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ProductRepo extends JpaRepository<Product,Long> {
     Optional<Product> findById(Long productId);
 
-    List<Product> findProductByIdSAndState(Long id, State state);
+    //List<Product> findProductByIdSAndState(Long id, State state);
 
     Product save(Product product);
 

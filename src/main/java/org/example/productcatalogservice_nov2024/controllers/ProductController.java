@@ -20,7 +20,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    @Qualifier("sps")
+    //@Qualifier("sps")
     private IProductService productService;
 
     @GetMapping("/products")
@@ -42,9 +42,13 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
         try {
-            if(productId <= 0) {
+            if(productId < 0) {
                 throw new IllegalArgumentException("productId is invalid");
             }
+            else if(productId == 0) {
+                throw new IllegalArgumentException("product with id 0 not accessible");
+            }
+
             Product product = productService.getProductById(productId);
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 

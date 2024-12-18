@@ -48,7 +48,7 @@ public class ProductController {
             else if(productId == 0) {
                 throw new IllegalArgumentException("product with id 0 not accessible");
             }
-
+            
             Product product = productService.getProductById(productId);
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 
@@ -68,8 +68,8 @@ public class ProductController {
 
     @PostMapping("/products")
     public ProductDto createProduct(@RequestBody ProductDto productDto) {
-        productService.createProduct(from(productDto));
-        return productDto;
+        Product product = productService.createProduct(from(productDto));
+        return from(product);
     }
 
     @PutMapping("/products/{id}")

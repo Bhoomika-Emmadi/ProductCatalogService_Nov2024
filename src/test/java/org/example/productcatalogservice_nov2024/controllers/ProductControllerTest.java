@@ -4,6 +4,8 @@ import org.example.productcatalogservice_nov2024.dtos.ProductDto;
 import org.example.productcatalogservice_nov2024.models.Product;
 import org.example.productcatalogservice_nov2024.services.IProductService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +22,9 @@ class ProductControllerTest {
 
     @MockBean
     private IProductService productService;
+
+    @Captor
+    private ArgumentCaptor<Long> idCaptor;
 
     @Test
     public void TestGetProductById_WithValidId_RunsSuccessfully() {
@@ -64,6 +69,25 @@ class ProductControllerTest {
         //act and assert
         assertThrows(RuntimeException.class,()->productController
                 .getProductById(101L));
+
+    }
+
+    @Test
+    public void TestGetProductById_ProductServiceCalledWithCorrectArguments_RunSuccessfully() {
+        //arrange
+        Long productId = 2L;
+        Product product = new Product();
+        product.setId(productId);
+        product.setName("Iphone");
+        when(productService.getProductById(productId))
+                .thenReturn(product);
+
+        //act
+        productController.getProductById(productId);
+
+        //assert
+        verify(productService).getProductById(idCaptor.capture());
+        assertEquals(productId,idCaptor.getValue());
 
     }
 

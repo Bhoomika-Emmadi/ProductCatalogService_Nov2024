@@ -11,12 +11,15 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Optional;
 
-@Primary
+
 @Service("sps")
 public class StorageProductService implements IProductService {
 
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public List<Product> getProducts() {
@@ -50,9 +53,9 @@ public class StorageProductService implements IProductService {
        Optional<Product> optionalProduct = productRepo.findById(productId);
        if(optionalProduct.isEmpty()) return null;
 
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         UserDto userDto = restTemplate
-                .getForEntity("http://localhost:9000/users/{userId}", UserDto.class,userId).getBody();
+                .getForEntity("http://userservice/users/{userId}", UserDto.class,userId).getBody();
 
         if(userDto != null) {
             System.out.println(userDto.getEmail());
